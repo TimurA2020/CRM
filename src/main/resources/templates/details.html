@@ -1,0 +1,79 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/mainlayout.html">
+<div layout:fragment="fragment">
+    <div class="container" th:if = "${request != null}">
+        <h3 th:if="${request.handled == true}" th:text="'Handled Request'" th:class="mt-2" style="text-align:center; color:green;"></h3>
+        <form action="/handle" method="post">
+        <div class="row mt-3">
+            <div class="col-12">
+                <label>Full name:</label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <input placeholder="Full Name" class="form-control" type="text" name="full_name" th:value="${request.userName}" readonly>
+                <input type="hidden" th:value="${request.id}" name="id">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label>Course: </label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <input placeholder="Full Name" class="form-control" type="text" name="course" th:value="${request.courseName}" readonly>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label>Phone Number:</label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <input type="number" name="phone" class="form-control" th:value="${request.phone}" readonly>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label>Request:</label>
+            </div>
+        </div>
+        <div class="row" mt-1>
+            <div class="col-12">
+                <textarea placeholder="Enter your request" rows="5" type="text" name="comment" th:value="${request.comment}" class="form-control" readonly></textarea>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div th:if="${request.handled == false}" class="col-sm-auto pe-0">
+                <button type="submit" class="btn btn-success">Handle Request</button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete Request</button>
+            </div>
+        </div>
+        </form>
+        <!-- Modal -->
+        <form action="/deleterequest" method="post">
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" th:value="${request.id}" name="id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

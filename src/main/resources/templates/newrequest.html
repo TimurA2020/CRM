@@ -1,0 +1,58 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/mainlayout.html">
+<div layout:fragment="fragment">
+    <div class="container">
+        <form action="/addrequest" method="post">
+        <div class="row mt-3">
+            <div class="col-12">
+                <label>Full name:</label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <input placeholder="Full Name" class="form-control" type="text" name="full_name" required>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label>Course: </label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <select name="course" class="form-select">
+                    <option value="Java">Java</option>
+                    <option value="Python">Python</option>
+                    <option value="Csharp">C#</option>
+                    <option value="Front">Front End</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label>Phone Number:</label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+                <input placeholder="+7(7__)________" type="number" name="phone" class="form-control" required>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label>Request:</label>
+            </div>
+        </div>
+        <div class="row" mt-1>
+            <div class="col-12">
+                <textarea placeholder="Enter your request" rows="5" type="text" name="comment" class="form-control" required></textarea>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-3">
+                <button type="submit" class="btn btn-success">Submit Request</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
