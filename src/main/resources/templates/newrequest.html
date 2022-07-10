@@ -20,11 +20,8 @@
         </div>
         <div class="row mt-1">
             <div class="col-12">
-                <select name="course" class="form-select">
-                    <option value="Java">Java</option>
-                    <option value="Python">Python</option>
-                    <option value="Csharp">C#</option>
-                    <option value="Front">Front End</option>
+                <select name="course_id" class="form-select">
+                    <option th:each="crs : ${courses}" th:value="${crs.id}" th:text="${crs.name} + ' $' + ${crs.price} "></option>
                 </select>
             </div>
         </div>

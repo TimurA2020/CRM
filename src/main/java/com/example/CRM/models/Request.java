@@ -20,11 +20,12 @@ public class Request {
 
     String userName;
 
-    String courseName;
-
     String comment;
 
     String phone;
 
     boolean handled;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    Courses course;
 }
