@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -28,4 +29,7 @@ public class Request {
 
     @ManyToOne(fetch = FetchType.LAZY)
     Courses course;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    List<Operators> operators;
 }

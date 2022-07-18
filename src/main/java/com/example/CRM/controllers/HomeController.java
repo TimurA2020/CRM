@@ -1,11 +1,15 @@
 package com.example.CRM.controllers;
 
 import com.example.CRM.models.Courses;
+import com.example.CRM.models.Operators;
 import com.example.CRM.models.Request;
 import com.example.CRM.repos.CourseRepo;
+import com.example.CRM.repos.OperatorRepo;
 import com.example.CRM.repos.RequestRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.Operator;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +26,9 @@ public class HomeController {
 
     @Autowired
     private CourseRepo courseRepo;
+
+    @Autowired
+    private OperatorRepo operatorRepo;
 
     @GetMapping(value = "/")
     public String index(Model model) {
@@ -55,6 +62,10 @@ public class HomeController {
     public String details(@PathVariable(name = "id") long id,
                           Model model){
         Request request = requestRepo.getReferenceById(id);
+        List<Operators> operators = operatorRepo.findAll();
+        List<Operators> currentOperators = request.getOperators();
+        model.addAttribute("currentoperators", currentOperators);
+        model.addAttribute("operators", operators);
         model.addAttribute("request", request);
         return "details";
     }
@@ -86,16 +97,33 @@ public class HomeController {
     }
 
     @PostMapping(value = "/handle")
-    public String handleRequest(@RequestParam(name = "id") Long id){
+    public String handleRequest(@RequestParam(name = "request_id") Long id,
+                                @RequestParam(name = "handler") List<Long> operator_id){
+        List<Operators> operators = operatorRepo.findAllById(operator_id);
         Request request = requestRepo.getReferenceById(id);
+        request.setOperators(operators);
         request.setHandled(true);
         requestRepo.save(request);
         return "redirect:/";
     }
 
+    @PostMapping(value = "/deleteoperatorfromrequest")
+    public String deleteOperatorFromRequest(@RequestParam(name = "request_id") Long id,
+                                            @RequestParam(name = "handler_id") Long handler_id){
+        Request request = requestRepo.getReferenceById(id);
+        Operators operator = operatorRepo.getReferenceById(handler_id);
+        request.getOperators().remove(operator);
+        requestRepo.save(request);
+        return "redirect:/details/" + id;
+    }
+
     @PostMapping(value = "/deleterequest")
     public String deleteRequest(@RequestParam(name = "id") Long id){
-        requestRepo.deleteById(id);
+        Request request = requestRepo.getReferenceById(id);
+        request.getOperators().clear();
+        requestRepo.save(request);
+        requestRepo.delete(request);
         return "redirect:/";
     }
+
 }

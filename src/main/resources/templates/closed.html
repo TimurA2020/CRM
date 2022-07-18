@@ -8,6 +8,7 @@
                 <h5 class="card-title" th:text="${'Course: ' + request.course.name}"></h5>
                 <p class="card-text" th:text="${request.comment}"></p>
                 <p class="card-text" th:text="${'Phone: ' + request.phone}"></p>
+                <p class="card-text" th:each="operator : ${request.operators}" th:text="${'Handled by: ' + operator.name}"></p>
                 <a th:href="@{'/details/' + ${request.id}}" class="btn btn-success">Details</a>
             </div>
             </div>

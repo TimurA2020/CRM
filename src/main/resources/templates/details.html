@@ -3,10 +3,9 @@
 <div layout:fragment="fragment">
     <div class="container" th:if = "${request != null}">
         <h3 th:if="${request.handled == true}" th:text="'Handled Request'" th:class="mt-2" style="text-align:center; color:green;"></h3>
-        <form action="/handle" method="post">
         <div class="row mt-3">
             <div class="col-12">
-                <label>Full name:</label>
+                <label>Full name: </label>
             </div>
         </div>
         <div class="row mt-1">
@@ -42,18 +41,58 @@
         </div>
         <div class="row" mt-1>
             <div class="col-12">
-                <textarea placeholder="Enter your request" rows="5" type="text" name="comment" th:value="${request.comment}" class="form-control" readonly></textarea>
+                <textarea rows="5" type="text" name="comment" th:text="${request.comment}" class="form-control" readonly></textarea>
             </div>
         </div>
         <div class="row mt-2">
             <div th:if="${request.handled == false}" class="col-sm-auto pe-0">
-                <button type="submit" class="btn btn-success">Handle Request</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#handleModal">Handle Request</button>
+<!--                FIRST MODAL START-->
+                <div class="modal fade modal-lg" id="handleModal" tabindex="-1" aria-labelledby="handleModal" aria-hidden="true">
+                    <form action="/handle" method="post">
+                        <input type="hidden" name="request_id" th:value="${request.id}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Who will handle this request?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+<!--                            OPERATORS TABLE!-->
+                            <div class="modal-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Handled by</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Surname</th>
+                                        <th scope="col">Department</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                    <tr th:each="operator : ${operators}">
+                                        <th scope="row"><div class="form-check"><input class="form-check-input" type="checkbox" name="handler" th:value="${operator.id}" id="flexCheckDefault"></div></th>
+                                        <td th:text="${operator.name}"></td>
+                                        <td th:text="${operator.surname}"></td>
+                                        <td th:text="${operator.department}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Handle</button>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
             </div>
+
+
             <div class="col-3">
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete Request</button>
             </div>
         </div>
-        </form>
         <!-- Modal -->
         <form action="/deleterequest" method="post">
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -75,5 +114,24 @@
             </div>
         </div>
         </form>
+
+        <table class="table table-striped" th:if="${request.handled == true}">
+            <thead>
+            <tr>
+                <th scope="col">Delete</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Department</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            <tr th:each="operator : ${currentoperators}">
+                <th scope="row"><form action="/deleteoperatorfromrequest" method="post"><input type="hidden" name="request_id" th:value="${request.id}"><input type="hidden" name="handler_id" th:value="${operator.id}"> <button type="submit" class="btn btn-sm btn-danger">X</button></form></th>
+                <td th:text="${operator.name}"></td>
+                <td th:text="${operator.surname}"></td>
+                <td th:text="${operator.department}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
